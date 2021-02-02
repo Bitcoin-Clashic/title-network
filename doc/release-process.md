@@ -1,4 +1,4 @@
-Title Network Release Process
+Bitcoin Clashic Release Process
 ===============================
 
 
@@ -43,21 +43,21 @@ Title Network Release Process
     
 7. Verify matching gitian builds, gather signatures
 
-8. Upload gitian build to [title.network](https://title.network/)
+8. Upload gitian build to [Bitcoin Clashic](https://bitcoin.clashic.cash/)
 
 9. Re-verify the uploads (make sure that downloading them, their checksums are ok)
 
-10. Create a [GitHub release](https://github.com/title-network/title-network/releases)
+10. Create a [GitHub release](https://github.com/Bitcoin-Clashic/wallet-official/releases)
 
 
 ## After Release
 
-11. Update version number on title.network
+11. Update version number on bitcoin.clashic.cash
 
 12. Publish signed checksums (various places, e.g. blog, reddit/r/BitcoinABC)
 
 13. Announce Release:
-    - [Reddit](https://www.reddit.com/r/TitleNetwork/)
-    - Twitter @title_network
-    - Public slack channels friendly to Title Network announcements 
-      (eg. #title-announce on BTCforks)
+    - [Reddit](https://www.reddit.com/r/BitcoinClashic/)
+    - Twitter @Bitcoin_clashic
+    - Public slack channels friendly to Bitcoin Clashic announcements 
+      (eg. #clashic-announce on BTCforks)

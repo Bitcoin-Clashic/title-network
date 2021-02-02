@@ -6,7 +6,7 @@
 #define BITCOIN_QT_PAYMENTSERVER_H
 
 // This class handles payment requests from clicking on
-// tnet: URIs
+// bchc: URIs
 //
 // This is somewhat tricky, because we have to deal with the situation where the
 // user clicks on a link during startup/initialization, when the splash-screen
@@ -61,7 +61,7 @@ public:
 
     // Returns true if there were URIs on the command line which were
     // successfully sent to an already-running process.
-    // Note: if a payment request is given, SelectParams(MAIN/TESTNET)  will be
+    // Note: if a payment request is given, SelectParams(MAIN/TNET)  will be
     // called so we startup in the right mode.
     static bool ipcSendCommandLine();
 

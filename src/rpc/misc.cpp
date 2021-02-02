@@ -59,8 +59,8 @@ static UniValue getinfo(const Config &config, const JSONRPCRequest &request) {
             "  \"proxy\": \"host:port\",     (string, optional) the proxy used "
             "by the server\n"
             "  \"difficulty\": xxxxxx,       (numeric) the current difficulty\n"
-            "  \"testnet\": true|false,      (boolean) if the server is using "
-            "testnet or not\n"
+            "  \"tnet\": true|false,      (boolean) if the server is using "
+            "tnet or not\n"
             "  \"keypoololdest\": xxxxxx,    (numeric) the timestamp (seconds "
             "since Unix epoch) of the oldest pre-generated key in the key "
             "pool\n"
@@ -108,8 +108,8 @@ static UniValue getinfo(const Config &config, const JSONRPCRequest &request) {
     obj.push_back(Pair("proxy", (proxy.IsValid() ? proxy.proxy.ToStringIPPort()
                                                  : std::string())));
     obj.push_back(Pair("difficulty", double(GetDifficulty(chainActive.Tip()))));
-    obj.push_back(Pair("testnet", Params().NetworkIDString() ==
-                                      CBaseChainParams::TESTNET));
+    obj.push_back(Pair("tnet", Params().NetworkIDString() ==
+                                      CBaseChainParams::TNET));
 #ifdef ENABLE_WALLET
     if (pwalletMain) {
         obj.push_back(
@@ -577,7 +577,7 @@ static UniValue echo(const Config &config, const JSONRPCRequest &request) {
             "testing.\n"
             "\nThe difference between echo and echojson is that echojson has "
             "argument conversion enabled in the client-side table in"
-            "title-cli and the GUI. There is no server-side difference.");
+            "clashic-cli and the GUI. There is no server-side difference.");
 
     return request.params;
 }

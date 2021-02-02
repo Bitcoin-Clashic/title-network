@@ -1,4 +1,4 @@
-Title Network
+Bitcoin Clashic
 =============
 
 Intro
@@ -11,9 +11,9 @@ with each other, with the help of a P2P network to check for double-spending.
 
 Setup
 -----
-Unpack the files into a directory and run title-qt.exe.
+Unpack the files into a directory and run clashic-qt.exe.
 
-Title Network is based on Bitcoin Core, which is the original Bitcoin
+Bitcoin Clashic is based on Bitcoin Core, which is the original Bitcoin
 client and builds the backbone of the network. It downloads and stores the
 entire history of Bitcoin transactions; depending on the speed of your computer
 and network connection, the synchronization process can take anywhere from a

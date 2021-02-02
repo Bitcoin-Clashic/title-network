@@ -838,7 +838,7 @@ void SendCoinsDialog::coinControlChangeEdited(const QString &text) {
         } else if (!IsValidDestination(dest)) {
             // Invalid address
             ui->labelCoinControlChangeLabel->setText(
-                tr("Warning: Invalid Title Network address"));
+                tr("Warning: Invalid Bitcoin Clashic address"));
         } else {
             // Valid address
             if (!model->IsSpendable(dest)) {

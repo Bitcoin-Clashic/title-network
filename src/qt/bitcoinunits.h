@@ -52,11 +52,11 @@ public:
     explicit BitcoinUnits(QObject *parent);
 
     /**
-     * Bitcoin units (Title Network unit work the same as Bitcoin).
+     * Bitcoin units (Bitcoin Clashic unit work the same as Bitcoin).
      * @note Source: https://en.bitcoin.it/wiki/Units.
      * Please add only sensible ones.
      */
-    enum Unit { TNET, mTNET, uTNET };
+    enum Unit { BCHC, mBCHC, uBCHC };
 
     enum SeparatorStyle { separatorNever, separatorStandard, separatorAlways };
 

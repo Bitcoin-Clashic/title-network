@@ -5,7 +5,7 @@
 #include "config.h"
 #include "chainparams.h"
 #include "consensus/consensus.h"
-#include "test/test_title.h"
+#include "test/test_clashic.h"
 
 #include <boost/test/unit_test.hpp>
 
@@ -50,7 +50,7 @@ BOOST_AUTO_TEST_CASE(chain_params) {
     SelectParams(CBaseChainParams::MAIN);
     BOOST_CHECK_EQUAL(&Params(), &config.GetChainParams());
 
-    SelectParams(CBaseChainParams::TESTNET);
+    SelectParams(CBaseChainParams::TNET);
     BOOST_CHECK_EQUAL(&Params(), &config.GetChainParams());
 
     SelectParams(CBaseChainParams::REGTEST);

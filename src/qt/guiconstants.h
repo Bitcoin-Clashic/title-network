@@ -46,9 +46,9 @@ static const int MAX_URI_LENGTH = 255;
 /* Number of frames in spinner animation */
 #define SPINNER_FRAMES 36
 
-#define QAPP_ORG_NAME "TitleNetwork"
-#define QAPP_ORG_DOMAIN "titlenetwork.org"
-#define QAPP_APP_NAME_DEFAULT "TitleNetwork-Qt"
-#define QAPP_APP_NAME_TESTNET "TitleNetwork-Qt-testnet"
+#define QAPP_ORG_NAME "BitcoinClashic"
+#define QAPP_ORG_DOMAIN "bitcoin.clashic.cash"
+#define QAPP_APP_NAME_DEFAULT "Clashic-Qt"
+#define QAPP_APP_NAME_TNET "Clashic-Qt-tnet"
 
 #endif // BITCOIN_QT_GUICONSTANTS_H

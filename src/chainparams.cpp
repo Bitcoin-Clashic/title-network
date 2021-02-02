@@ -172,7 +172,7 @@ public:
         // ie. (((586656 -(210000*2))+(((210000*3)-586656)*10)))=166656+(43344*10)
         // so this interval would be 581952 blocks past last halving
         // which means 12.5 / 10 / 2 block rewards at a height of 210000 * 2 + 581952
-        // or halve to 0.625 TNET at height 1,001,952
+        // or halve to 0.625 BCHC at height 1,001,952
         consensus.nSubsidyHalvingIntervalOneMinuteAdjustment =
             (((consensus.oneMinuteBlockHeight - (210000 * 2)) + 
             (((210000 * 3) - consensus.oneMinuteBlockHeight) * 10)));
@@ -210,16 +210,16 @@ public:
         // truevisionofsatoshi.com
         vSeeds.push_back(
             CDNSSeedData("clashic.org", "seeder-mainnet.clashic.org", true));
-        // CCGLLC - works on mainnet & testnet
+        // CCGLLC - works on mainnet & tnet
         vSeeds.push_back(
-            CDNSSeedData("bitcoin-rebooted.xyz", "tnetseed.bitcoin-rebooted.xyz", true));
+            CDNSSeedData("bitcoin-rebooted.xyz", "bchcseed.bitcoin-rebooted.xyz", true));
 
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<uint8_t>(1, 0);
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<uint8_t>(1, 5);
         base58Prefixes[SECRET_KEY] = std::vector<uint8_t>(1, 128);
         base58Prefixes[EXT_PUBLIC_KEY] = {0x04, 0x88, 0xB2, 0x1E};
         base58Prefixes[EXT_SECRET_KEY] = {0x04, 0x88, 0xAD, 0xE4};
-        titleaddrPrefix = "tnet";
+        titleaddrPrefix = "bchc";
 
         vFixedSeeds = std::vector<SeedSpec6>(
             pnSeed6_main, pnSeed6_main + ARRAYLEN(pnSeed6_main));
@@ -302,7 +302,7 @@ public:
 static CMainParams mainParams;
 
 /**
- * Testnet (v3)
+ * Tesbchc (v3)
  */
 class CTestNetParams : public CChainParams {
 public:
@@ -400,23 +400,23 @@ public:
         // nodes with support for servicebits filtering should be at the top
         // truevisionofsatoshi.com
         vSeeds.push_back(CDNSSeedData("truevisionofsatoshi.com",
-                                      "seeder-testnet.truevisionofsatoshi.com", true));
+                                      "seeder-tnet.truevisionofsatoshi.com", true));
         // clashic.cash maintained by Clashicly
         vSeeds.push_back(
-            CDNSSeedData("clashic.cash", "testnet-seeder.clashic.cash", true));
+            CDNSSeedData("clashic.cash", "tnet-seeder.clashic.cash", true));
         // bitcoincore.zone
         vSeeds.push_back(
-            CDNSSeedData("bitcoincore.zone", "testnet-seeder.bitcoincore.zone", true));
-        // CCGLLC - works on mainnet & testnet
+            CDNSSeedData("bitcoincore.zone", "tnet-seeder.bitcoincore.zone", true));
+        // CCGLLC - works on mainnet & tnet
         vSeeds.push_back(
-            CDNSSeedData("bitcoin-rebooted.xyz", "tnetseed.bitcoin-rebooted.xyz", true));
+            CDNSSeedData("bitcoin-rebooted.xyz", "bchcseed.bitcoin-rebooted.xyz", true));
 
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<uint8_t>(1, 111);
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<uint8_t>(1, 196);
         base58Prefixes[SECRET_KEY] = std::vector<uint8_t>(1, 239);
         base58Prefixes[EXT_PUBLIC_KEY] = {0x04, 0x35, 0x87, 0xCF};
         base58Prefixes[EXT_SECRET_KEY] = {0x04, 0x35, 0x83, 0x94};
-        titleaddrPrefix = "tnettest";
+        titleaddrPrefix = "bchctest";
         vFixedSeeds = std::vector<SeedSpec6>(
             pnSeed6_test, pnSeed6_test + ARRAYLEN(pnSeed6_test));
 
@@ -541,7 +541,7 @@ public:
         base58Prefixes[SECRET_KEY] = std::vector<uint8_t>(1, 239);
         base58Prefixes[EXT_PUBLIC_KEY] = {0x04, 0x35, 0x87, 0xCF};
         base58Prefixes[EXT_SECRET_KEY] = {0x04, 0x35, 0x83, 0x94};
-        titleaddrPrefix = "tnetreg";
+        titleaddrPrefix = "bchcreg";
     }
 
     void UpdateBIP9Parameters(Consensus::DeploymentPos d, int64_t nStartTime,
@@ -565,7 +565,7 @@ CChainParams &Params(const std::string &chain) {
         return mainParams;
     }
 
-    if (chain == CBaseChainParams::TESTNET) {
+    if (chain == CBaseChainParams::TNET) {
         return testNetParams;
     }
 

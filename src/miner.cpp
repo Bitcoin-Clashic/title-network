@@ -70,7 +70,7 @@ int64_t UpdateTime(CBlockHeader *pblock,
         pblock->nTime = nNewTime;
     }
 
-    // Updating time can change work required on testnet:
+    // Updating time can change work required on tnet:
     if (consensusParams.fPowAllowMinDifficultyBlocks) {
         pblock->nBits =
             GetNextWorkRequired(pindexPrev, pblock, consensusParams);

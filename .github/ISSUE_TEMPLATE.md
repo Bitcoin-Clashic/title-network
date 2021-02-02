@@ -1,11 +1,11 @@
 <!--- Remove sections that do not apply -->
 
-This issue tracker is only for technical issues related to title-network.
+This issue tracker is only for technical issues related to bitcoin-clashic.
 
 General bitcoin questions and/or support requests and are best directed to the [Bitcoin StackExchange](https://bitcoin.stackexchange.com).
-General Title Network questions and/or support requests and are best directed to the [Title Network Discord](https://discord.gg/cwpeGPk).
+General Bitcoin Clashic questions and/or support requests and are best directed to the [Bitcoin Clashic Discord](https://discord.gg/cwpeGPk).
 
-For reporting security issues, please read instructions at [https://title.network/](https://title.network/).
+For reporting security issues, please read instructions at [https://bitcoin.clashic.cash/](https://bitcoin.clashic.cash/).
 
 ### Describe the issue
 

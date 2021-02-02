@@ -25,7 +25,7 @@ SCRIPT_ADDRESS_TEST = 196
 PRIVKEY = 128
 PRIVKEY_TEST = 239
 
-metadata_keys = ['isPrivkey', 'isTestnet', 'addrType', 'isCompressed']
+metadata_keys = ['isPrivkey', 'isTesbchc', 'addrType', 'isCompressed']
 # templates for valid sequences
 templates = [
   # prefix, payload_size, suffix, metadata

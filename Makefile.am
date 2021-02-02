@@ -14,21 +14,21 @@ export PYTHONPATH
 
 GZIP_ENV="-9n"
 
-if BUILD_TITLE_LIBS
+if build_clashic_LIBS
 pkgconfigdir = $(libdir)/pkgconfig
-pkgconfig_DATA = libtitleconsensus.pc
+pkgconfig_DATA = libclashicconsensus.pc
 endif
 
-TITLED_BIN=$(top_builddir)/src/$(TITLE_DAEMON_NAME)$(EXEEXT)
-TITLE_QT_BIN=$(top_builddir)/src/qt/$(TITLE_GUI_NAME)$(EXEEXT)
-TITLE_CLI_BIN=$(top_builddir)/src/$(TITLE_CLI_NAME)$(EXEEXT)
-TITLE_SEEDER_BIN=$(top_builddir)/src/$(TITLE_SEEDER_NAME)$(EXEEXT)
-TITLE_WIN_INSTALLER=$(PACKAGE)-$(PACKAGE_VERSION)-win$(WINDOWS_BITS)-setup$(EXEEXT)
+CLASHICD_BIN=$(top_builddir)/src/$(CLASHIC_DAEMON_NAME)$(EXEEXT)
+CLASHIC_QT_BIN=$(top_builddir)/src/qt/$(CLASHIC_GUI_NAME)$(EXEEXT)
+CLASHIC_CLI_BIN=$(top_builddir)/src/$(CLASHIC_CLI_NAME)$(EXEEXT)
+CLASHIC_SEEDER_BIN=$(top_builddir)/src/$(CLASHIC_SEEDER_NAME)$(EXEEXT)
+CLASHIC_WIN_INSTALLER=$(PACKAGE)-$(PACKAGE_VERSION)-win$(WINDOWS_BITS)-setup$(EXEEXT)
 
 empty :=
 space := $(empty) $(empty)
 
-OSX_APP=TitleNetwork-Qt.app
+OSX_APP=Clashic-Qt.app
 OSX_VOLNAME = $(subst $(space),-,$(PACKAGE_NAME))
 OSX_DMG = $(OSX_VOLNAME).dmg
 OSX_BACKGROUND_SVG=background.svg
@@ -37,21 +37,21 @@ OSX_BACKGROUND_IMAGE_DPIS=36 72
 OSX_DSSTORE_GEN=$(top_srcdir)/contrib/macdeploy/custom_dsstore.py
 OSX_DEPLOY_SCRIPT=$(top_srcdir)/contrib/macdeploy/macdeployqtplus
 OSX_FANCY_PLIST=$(top_srcdir)/contrib/macdeploy/fancy.plist
-OSX_INSTALLER_ICONS=$(top_srcdir)/src/qt/res/icons/title.icns
+OSX_INSTALLER_ICONS=$(top_srcdir)/src/qt/res/icons/clashic.icns
 OSX_PLIST=$(top_builddir)/share/qt/Info.plist #not installed
 OSX_QT_TRANSLATIONS = da,de,es,hu,ru,uk,zh_CN,zh_TW
 
 DIST_DOCS = $(wildcard doc/*.md) $(wildcard doc/release-notes/*.md)
-DIST_CONTRIB = $(top_srcdir)/contrib/title-cli.bash-completion \
-	       $(top_srcdir)/contrib/title-tx.bash-completion \
-	       $(top_srcdir)/contrib/titled.bash-completion \
+DIST_CONTRIB = $(top_srcdir)/contrib/clashic-cli.bash-completion \
+	       $(top_srcdir)/contrib/clashic-tx.bash-completion \
+	       $(top_srcdir)/contrib/clashicd.bash-completion \
 	       $(top_srcdir)/contrib/init \
 	       $(top_srcdir)/contrib/rpm
 
 BIN_CHECKS=$(top_srcdir)/contrib/devtools/symbol-check.py \
            $(top_srcdir)/contrib/devtools/security-check.py
 
-WINDOWS_PACKAGING = $(top_srcdir)/share/pixmaps/title.ico \
+WINDOWS_PACKAGING = $(top_srcdir)/share/pixmaps/clashic.ico \
   $(top_srcdir)/share/pixmaps/nsis-header.bmp \
   $(top_srcdir)/share/pixmaps/nsis-wizard.bmp \
   $(top_srcdir)/doc/README_windows.txt
@@ -70,11 +70,11 @@ COVERAGE_INFO = baseline_filtered_combined.info baseline.info \
 dist-hook:
 	-$(GIT) archive --format=tar HEAD -- src/clientversion.cpp | $(AMTAR) -C $(top_distdir) -xf -
 
-$(TITLE_WIN_INSTALLER): all-recursive
+$(CLASHIC_WIN_INSTALLER): all-recursive
 	$(MKDIR_P) $(top_builddir)/release
-	STRIPPROG="$(STRIP)" $(INSTALL_STRIP_PROGRAM) $(TITLED_BIN) $(top_builddir)/release
-	STRIPPROG="$(STRIP)" $(INSTALL_STRIP_PROGRAM) $(TITLE_QT_BIN) $(top_builddir)/release
-	STRIPPROG="$(STRIP)" $(INSTALL_STRIP_PROGRAM) $(TITLE_CLI_BIN) $(top_builddir)/release
+	STRIPPROG="$(STRIP)" $(INSTALL_STRIP_PROGRAM) $(CLASHICD_BIN) $(top_builddir)/release
+	STRIPPROG="$(STRIP)" $(INSTALL_STRIP_PROGRAM) $(CLASHIC_QT_BIN) $(top_builddir)/release
+	STRIPPROG="$(STRIP)" $(INSTALL_STRIP_PROGRAM) $(CLASHIC_CLI_BIN) $(top_builddir)/release
 	@test -f $(MAKENSIS) && $(MAKENSIS) -V2 $(top_builddir)/share/setup.nsi || \
 	  echo error: could not build $@
 	@echo built $@
@@ -94,11 +94,11 @@ $(OSX_APP)/Contents/Info.plist: $(OSX_PLIST)
 	$(MKDIR_P) $(@D)
 	$(INSTALL_DATA) $< $@
 
-$(OSX_APP)/Contents/Resources/title.icns: $(OSX_INSTALLER_ICONS)
+$(OSX_APP)/Contents/Resources/clashic.icns: $(OSX_INSTALLER_ICONS)
 	$(MKDIR_P) $(@D)
 	$(INSTALL_DATA) $< $@
 
-$(OSX_APP)/Contents/MacOS/TitleNetwork-Qt: $(TITLE_QT_BIN)
+$(OSX_APP)/Contents/MacOS/Clashic-Qt: $(CLASHIC_QT_BIN)
 	$(MKDIR_P) $(@D)
 	STRIPPROG="$(STRIP)" $(INSTALL_STRIP_PROGRAM)  $< $@
 
@@ -107,8 +107,8 @@ $(OSX_APP)/Contents/Resources/Base.lproj/InfoPlist.strings:
 	echo '{	CFBundleDisplayName = "$(PACKAGE_NAME)"; CFBundleName = "$(PACKAGE_NAME)"; }' > $@
 
 OSX_APP_BUILT=$(OSX_APP)/Contents/PkgInfo $(OSX_APP)/Contents/Resources/empty.lproj \
-  $(OSX_APP)/Contents/Resources/title.icns $(OSX_APP)/Contents/Info.plist \
-  $(OSX_APP)/Contents/MacOS/TitleNetwork-Qt $(OSX_APP)/Contents/Resources/Base.lproj/InfoPlist.strings
+  $(OSX_APP)/Contents/Resources/clashic.icns $(OSX_APP)/Contents/Info.plist \
+  $(OSX_APP)/Contents/MacOS/Clashic-Qt $(OSX_APP)/Contents/Resources/Base.lproj/InfoPlist.strings
 
 osx_volname:
 	echo $(OSX_VOLNAME) >$@
@@ -133,7 +133,7 @@ $(APP_DIST_DIR)/Applications:
 	@rm -f $@
 	@cd $(@D); $(LN_S) /Applications $(@F)
 
-$(APP_DIST_EXTRAS): $(APP_DIST_DIR)/$(OSX_APP)/Contents/MacOS/TitleNetwork-Qt
+$(APP_DIST_EXTRAS): $(APP_DIST_DIR)/$(OSX_APP)/Contents/MacOS/Clashic-Qt
 
 $(OSX_DMG): $(APP_DIST_EXTRAS)
 	$(GENISOIMAGE) -no-cache-inodes -D -l -probe -V "$(OSX_VOLNAME)" -no-pad -r -dir-mode 0755 -apple -o $@ dist
@@ -148,7 +148,7 @@ $(APP_DIST_DIR)/.background/$(OSX_BACKGROUND_IMAGE): $(OSX_BACKGROUND_IMAGE_DPIF
 $(APP_DIST_DIR)/.DS_Store: $(OSX_DSSTORE_GEN)
 	$(PYTHON) $< "$@" "$(OSX_VOLNAME)"
 
-$(APP_DIST_DIR)/$(OSX_APP)/Contents/MacOS/TitleNetwork-Qt: $(OSX_APP_BUILT) $(OSX_PACKAGING)
+$(APP_DIST_DIR)/$(OSX_APP)/Contents/MacOS/Clashic-Qt: $(OSX_APP_BUILT) $(OSX_PACKAGING)
 	INSTALLNAMETOOL=$(INSTALLNAMETOOL)  OTOOL=$(OTOOL) STRIP=$(STRIP) $(PYTHON) $(OSX_DEPLOY_SCRIPT) $(OSX_APP) -translations-dir=$(QT_TRANSLATION_DIR) -add-qt-tr $(OSX_QT_TRANSLATIONS) -verbose 2
 
 deploydir: $(APP_DIST_EXTRAS)
@@ -159,19 +159,19 @@ appbundle: $(OSX_APP_BUILT)
 deploy: $(OSX_DMG)
 endif
 if TARGET_WINDOWS
-deploy: $(TITLE_WIN_INSTALLER)
+deploy: $(CLASHIC_WIN_INSTALLER)
 endif
 
-$(TITLE_QT_BIN): FORCE
+$(CLASHIC_QT_BIN): FORCE
 	$(MAKE) -C src qt/$(@F)
 
-$(TITLED_BIN): FORCE
+$(CLASHICD_BIN): FORCE
 	$(MAKE) -C src $(@F)
 
-$(TITLE_CLI_BIN): FORCE
+$(CLASHIC_CLI_BIN): FORCE
 	$(MAKE) -C src $(@F)
 
-$(TITLE_SEEDER_BIN): FORCE
+$(CLASHIC_SEEDER_BIN): FORCE
 	$(MAKE) -C src $(@F)
 
 if USE_LCOV
@@ -193,7 +193,7 @@ baseline_filtered_combined.info: leveldb_baseline_filtered.info baseline_filtere
 
 test_bitcoin.info: baseline_filtered_combined.info
 	$(MAKE) -C src/ check
-	$(LCOV) -c -d $(abs_builddir)/src -t test_title -o $@
+	$(LCOV) -c -d $(abs_builddir)/src -t test_clashic -o $@
 	$(LCOV) -z -d $(abs_builddir)/src
 	$(LCOV) -z -d $(abs_builddir)/src/leveldb
 
@@ -231,7 +231,7 @@ dist_noinst_SCRIPTS = autogen.sh
 
 EXTRA_DIST = $(top_srcdir)/share/genbuild.sh qa/pull-tester/rpc-tests.py qa/rpc-tests $(DIST_CONTRIB) $(DIST_DOCS) $(WINDOWS_PACKAGING) $(OSX_PACKAGING) $(BIN_CHECKS)
 
-CLEANFILES = $(OSX_DMG) $(TITLE_WIN_INSTALLER)
+CLEANFILES = $(OSX_DMG) $(CLASHIC_WIN_INSTALLER)
 
 # This file is problematic for out-of-tree builds if it exists.
 DISTCLEANFILES = qa/pull-tester/tests_config.pyc

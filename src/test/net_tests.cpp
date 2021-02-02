@@ -9,7 +9,7 @@
 #include "netbase.h"
 #include "serialize.h"
 #include "streams.h"
-#include "test/test_title.h"
+#include "test/test_clashic.h"
 
 #include <string>
 
@@ -195,7 +195,7 @@ BOOST_AUTO_TEST_CASE(test_userAgentLength) {
 
     BOOST_CHECK_EQUAL(userAgent(config).size(), MAX_SUBVERSION_LENGTH);
     BOOST_CHECK_EQUAL(userAgent(config),
-                      "/Title Network:0.17.0.5(EB8.0; very very very very very "
+                      "/Bitcoin Clashic:0.18.0.5(EB8.0; very very very very very "
                       "very very very very very very very very very very very "
                       "very very very very very very very very very very very "
                       "very very very very very very very very very very very "

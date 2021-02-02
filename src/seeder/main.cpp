@@ -38,7 +38,7 @@ public:
 
     void ParseCommandLine(int argc, char **argv) {
         static const char *help =
-            "Title-network-seeder\n"
+            "Bitcoin-clashic-seeder\n"
             "Usage: %s -h <host> -n <ns> [-m <mbox>] [-t <threads>] [-p "
             "<port>]\n"
             "\n"
@@ -54,7 +54,7 @@ public:
             "-i <ip:port>    IPV4 SOCKS5 proxy IP/Port\n"
             "-k <ip:port>    IPV6 SOCKS5 proxy IP/Port\n"
             "-w f1,f2,...    Allow these flag combinations as filters\n"
-            "--testnet       Use testnet\n"
+            "--tnet       Use tnet\n"
             "--wipeban       Wipe list of banned nodes\n"
             "--wipeignore    Wipe list of ignored nodes\n"
             "-?, --help      Show this text\n"
@@ -73,7 +73,7 @@ public:
                 {"proxyipv4", required_argument, 0, 'i'},
                 {"proxyipv6", required_argument, 0, 'k'},
                 {"filter", required_argument, 0, 'w'},
-                {"testnet", no_argument, &fUseTestNet, 1},
+                {"tnet", no_argument, &fUseTestNet, 1},
                 {"wipeban", no_argument, &fWipeBan, 1},
                 {"wipeignore", no_argument, &fWipeBan, 1},
                 {"help", no_argument, 0, 'h'},
@@ -152,12 +152,12 @@ public:
             }
         }
         if (filter_whitelist.empty()) {
-            filter_whitelist.insert(NODE_NETWORK | NODE_TITLE);
-            filter_whitelist.insert(NODE_NETWORK | NODE_TITLE |
+            filter_whitelist.insert(NODE_NETWORK | NODE_CLASHIC);
+            filter_whitelist.insert(NODE_NETWORK | NODE_CLASHIC |
                                     NODE_BLOOM);
-            filter_whitelist.insert(NODE_NETWORK | NODE_TITLE |
+            filter_whitelist.insert(NODE_NETWORK | NODE_CLASHIC |
                                     NODE_XTHIN);
-            filter_whitelist.insert(NODE_NETWORK | NODE_TITLE |
+            filter_whitelist.insert(NODE_NETWORK | NODE_CLASHIC |
                                     NODE_BLOOM | NODE_XTHIN);
         }
         if (host != nullptr && ns == nullptr) showHelp = true;
@@ -445,10 +445,10 @@ extern "C" void *ThreadStats(void *) {
 
 static const std::string mainnet_seeds[] = {
     "seeder.clashic.cash", "seeder.bitcoincore.zone", "seeder-mainnet.truevisionofsatoshi.com",
-    "tnetseed.bitcoin-rebooted.xyz",   "",    ""};
-static const std::string testnet_seeds[] = {
-    "testnet-seeder.clashic.cash", "testnet-seeder.bitcoincore.zone",
-    "seeder-testnet.truevisionofsatoshi.com", "tnetseed.bitcoin-rebooted.xyz", "", ""};
+    "bchcseed.bitcoin-rebooted.xyz",   "",    ""};
+static const std::string tnet_seeds[] = {
+    "tnet-seeder.clashic.cash", "tnet-seeder.bitcoincore.zone",
+    "seeder-tnet.truevisionofsatoshi.com", "bchcseed.bitcoin-rebooted.xyz", "", ""};
 static const std::string *seeds = mainnet_seeds;
 
 extern "C" void *ThreadSeeder(void *) {
@@ -507,12 +507,12 @@ int main(int argc, char **argv) {
     }
     bool fDNS = true;
     if (opts.fUseTestNet) {
-        printf("Using testnet.\n");
+        printf("Using tnet.\n");
         pchMessageStart[0] = 0xde;
         pchMessageStart[1] = 0x9a;
         pchMessageStart[2] = 0x86;
         pchMessageStart[3] = 0xf7;
-        seeds = testnet_seeds;
+        seeds = tnet_seeds;
         fTestNet = true;
     }
     if (!opts.ns) {

@@ -13,7 +13,7 @@
 - (NSString *)__bundleIdentifier
 {
     if (self == [NSBundle mainBundle]) {
-        return @"org.title.TitleNetwork-Qt";
+        return @"org.clashic.Clashic-Qt";
     } else {
         return [self __bundleIdentifier];
     }
@@ -27,7 +27,7 @@ void MacNotificationHandler::showNotification(const QString &title, const QStrin
         // okay, seems like 10.8+
         QByteArray utf8 = title.toUtf8();
         char* cString = (char *)utf8.constData();
-        NSString *titleMac = [[NSString alloc] initWithUTF8String:cString];
+        NSString *clashicMac = [[NSString alloc] initWithUTF8String:cString];
 
         utf8 = text.toUtf8();
         cString = (char *)utf8.constData();
@@ -35,13 +35,13 @@ void MacNotificationHandler::showNotification(const QString &title, const QStrin
 
         // do everything weak linked (because we will keep <10.8 compatibility)
         id userNotification = [[NSClassFromString(@"NSUserNotification") alloc] init];
-        [userNotification performSelector:@selector(setTitle:) withObject:titleMac];
+        [userNotification performSelector:@selector(setTitle:) withObject:clashicMac];
         [userNotification performSelector:@selector(setInformativeText:) withObject:textMac];
 
         id notificationCenterInstance = [NSClassFromString(@"NSUserNotificationCenter") performSelector:@selector(defaultUserNotificationCenter)];
         [notificationCenterInstance performSelector:@selector(deliverNotification:) withObject:userNotification];
 
-        [titleMac release];
+        [clashicMac release];
         [textMac release];
         [userNotification release];
     }

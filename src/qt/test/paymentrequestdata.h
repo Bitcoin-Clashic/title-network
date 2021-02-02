@@ -332,7 +332,7 @@ XYh860/Q4wvc7lfiTe+dXBzPKAKhMy91yETY\
 ";
 
 //
-// Contains a testnet paytoaddress, so payment request network doesn't match
+// Contains a tnet paytoaddress, so payment request network doesn't match
 // client network
 //
 const char *paymentrequest1_cert2_BASE64 = "\

@@ -1,5 +1,5 @@
-#ifndef TITLE_SEEDER_BITCOIN_H
-#define TITLE_SEEDER_BITCOIN_H
+#ifndef CLASHIC_SEEDER_BITCOIN_H
+#define CLASHIC_SEEDER_BITCOIN_H
 
 #include "protocol.h"
 

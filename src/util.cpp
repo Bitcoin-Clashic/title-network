@@ -102,8 +102,8 @@ namespace program_options {
 
 } // namespace boost
 
-const char *const TITLE_CONF_FILENAME = "title.conf";
-const char *const TITLE_PID_FILENAME = "titled.pid";
+const char *const CLASHIC_CONF_FILENAME = "clashic.conf";
+const char *const CLASHIC_PID_FILENAME = "clashicd.pid";
 
 ArgsManager gArgs;
 bool fPrintToConsole = false;
@@ -516,13 +516,13 @@ void PrintExceptionContinue(const std::exception *pex, const char *pszThread) {
 
 boost::filesystem::path GetDefaultDataDir() {
     namespace fs = boost::filesystem;
-// Windows < Vista: C:\Documents and Settings\Username\Application Data\Title
-// Windows >= Vista: C:\Users\Username\AppData\Roaming\Title
-// Mac: ~/Library/Application Support/Title
-// Unix: ~/.title
+// Windows < Vista: C:\Documents and Settings\Username\Application Data\Clashic
+// Windows >= Vista: C:\Users\Username\AppData\Roaming\Clashic
+// Mac: ~/Library/Application Support/Clashic
+// Unix: ~/.clashic
 #ifdef WIN32
     // Windows
-    return GetSpecialFolderPath(CSIDL_APPDATA) / "Title";
+    return GetSpecialFolderPath(CSIDL_APPDATA) / "Clashic";
 #else
     fs::path pathRet;
     char *pszHome = getenv("HOME");
@@ -532,10 +532,10 @@ boost::filesystem::path GetDefaultDataDir() {
         pathRet = fs::path(pszHome);
 #ifdef MAC_OSX
     // Mac
-    return pathRet / "Library/Application Support/Title";
+    return pathRet / "Library/Application Support/Clashic";
 #else
     // Unix
-    return pathRet / ".title";
+    return pathRet / ".clashic";
 #endif
 #endif
 }
@@ -589,7 +589,7 @@ boost::filesystem::path GetConfigFile(const std::string &confPath) {
 void ArgsManager::ReadConfigFile(const std::string &confPath) {
     boost::filesystem::ifstream streamConfig(GetConfigFile(confPath));
 
-    // No title.conf file is OK
+    // No clashic.conf file is OK
     if (!streamConfig.good()) return;
 
     {
@@ -602,7 +602,7 @@ void ArgsManager::ReadConfigFile(const std::string &confPath) {
              end;
              it != end; ++it) {
             // Don't overwrite existing settings so command line settings
-            // override title.conf
+            // override clashic.conf
             std::string strKey = std::string("-") + it->string_key;
             std::string strValue = it->value[0];
             InterpretNegativeSetting(strKey, strValue);
@@ -618,7 +618,7 @@ void ArgsManager::ReadConfigFile(const std::string &confPath) {
 
 #ifndef WIN32
 boost::filesystem::path GetPidFile() {
-    boost::filesystem::path pathPidFile(GetArg("-pid", TITLE_PID_FILENAME));
+    boost::filesystem::path pathPidFile(GetArg("-pid", CLASHIC_PID_FILENAME));
     if (!pathPidFile.is_complete()) pathPidFile = GetDataDir() / pathPidFile;
     return pathPidFile;
 }
@@ -885,7 +885,7 @@ std::string CopyrightHolders(const std::string &strPrefix) {
             .find("Bitcoin Core") == std::string::npos) {
         strCopyrightHolders += "\n" + strPrefix + "The Bitcoin Core developers"
             + "\n" + "Copyright (C) 2018-2019 "
-            + "Bitcoin Clashic/Bitcoin Core Sq/Title Network Developers";
+            + "Bitcoin Clashic/Bitcoin Core Sq/Bitcoin Clashic Developers";
     }
     return strCopyrightHolders;
 }

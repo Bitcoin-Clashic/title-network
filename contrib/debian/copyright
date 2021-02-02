@@ -1,12 +1,12 @@
 Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
-Upstream-Name: Title Network
+Upstream-Name: Bitcoin Clashic
 Upstream-Contact: Clashicly <clashicly@gmail.com>
- irc://#titlenetwork@freenode.net
-Source: https://github.com/title-network/title-network
+ irc://#bitcoinclashic@freenode.net
+Source: https://github.com/Bitcoin-Clashic/wallet-official
 
 Files: *
 Copyright: 2009-2017, Bitcoin Core Developers, 2017 Bitcoin Developers,
-           2018-2019 Bitcoin Clashic/Bitcoin Core Sq/Title Network Developers
+           2018-2019 Bitcoin Clashic/Bitcoin Core Sq/Bitcoin Clashic Developers
 License: Expat
 Comment: The Bitcoin Developers encompasses those contributing to Bitcoin
          client open source development (various clients).
@@ -83,9 +83,9 @@ License: Expat
 Comment: Modifications of Stephan Hutchings Typicons
 
 Files: src/qt/res/icons/about.png
-       src/qt/res/icons/title.*
-       share/pixmaps/title*
-       src/qt/res/src/title.svg
+       src/qt/res/icons/clashic.*
+       share/pixmaps/clashic*
+       src/qt/res/src/clashic.svg
 Copyright: Bitboy, Jonas Schnelli
 License: public-domain
 Comment: Site: https://bitcointalk.org/?topic=1756.0

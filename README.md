@@ -24,10 +24,10 @@ What is Bitcoin Clashic client?
 
 Bitcoin Clashic client is the open source software which enables the use of Bitcoin Clashic.
 
-Bitcoin Clashic was briefly called Title Network and Bitcoin Core before defaulting back to it's
+Bitcoin Clashic was briefly called Bitcoin Clashic and Bitcoin Core before defaulting back to it's
 original name in early 2020.
 
-Title Network is a rebrand of the [Bitcoin Core $BTCC Project](http://thebitcoincore.org),
+Bitcoin Clashic is a rebrand of the [Bitcoin Core $BTCC Project](http://thebitcoincore.org),
 Bitcoin Core Squared is a fork of the [Bitcoin Clashic Project](http://bitcoinclashic.org),
 which itself is a fork of the [Bitcoin ABC Project](https://bitcoinabc.org),
 which itself is yet another fork of the [Bitcoin Core](https://bitcoincore.org) software project

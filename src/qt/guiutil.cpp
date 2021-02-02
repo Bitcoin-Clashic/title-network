@@ -86,7 +86,7 @@ extern double NSAppKitVersionNumber;
 #endif
 
 namespace GUIUtil {
-const QString URI_SCHEME("tnet");
+const QString URI_SCHEME("bchc");
 
 QString dateTimeStr(const QDateTime &date) {
     return date.date().toString(Qt::SystemLocaleShortDate) + QString(" ") +
@@ -142,7 +142,7 @@ void setupAddressWidget(QValidatedLineEdit *widget, QWidget *parent) {
     // We don't want translators to use own addresses in translations
     // and this is the only place, where this address is supplied.
     widget->setPlaceholderText(
-        QObject::tr("Enter a Title Network address (e.g. %1)")
+        QObject::tr("Enter a Bitcoin Clashic address (e.g. %1)")
             .arg(QString::fromStdString(DummyAddress(Params()))));
 #endif
     widget->setValidator(new BitcoinAddressEntryValidator(parent));
@@ -158,7 +158,7 @@ void setupAmountWidget(QLineEdit *widget, QWidget *parent) {
 }
 
 bool parseBitcoinURI(const QUrl &uri, SendCoinsRecipient *out) {
-    // return if URI is not valid or is no tnet: URI
+    // return if URI is not valid or is no bchc: URI
     if (!uri.isValid() || uri.scheme() != URI_SCHEME) return false;
 
     SendCoinsRecipient rv;
@@ -192,7 +192,7 @@ bool parseBitcoinURI(const QUrl &uri, SendCoinsRecipient *out) {
             fShouldReturnFalse = false;
         } else if (i->first == "amount") {
             if (!i->second.isEmpty()) {
-                if (!BitcoinUnits::parse(BitcoinUnits::TNET, i->second,
+                if (!BitcoinUnits::parse(BitcoinUnits::BCHC, i->second,
                                          &rv.amount)) {
                     return false;
                 }
@@ -211,9 +211,9 @@ bool parseBitcoinURI(const QUrl &uri, SendCoinsRecipient *out) {
 }
 
 bool parseBitcoinURI(QString uri, SendCoinsRecipient *out) {
-    // Convert tnet:// to tnet:
+    // Convert bchc:// to bchc:
     //
-    //    Cannot handle this later, because tnet://
+    //    Cannot handle this later, because bchc://
     //    will cause Qt to see the part after // as host,
     //    which will lower-case it (and thus invalidate the address).
     if (uri.startsWith(URI_SCHEME + "://", Qt::CaseInsensitive)) {
@@ -230,7 +230,7 @@ QString formatBitcoinURI(const SendCoinsRecipient &info) {
     if (info.amount) {
         ret +=
             QString("?amount=%1")
-                .arg(BitcoinUnits::format(BitcoinUnits::TNET, info.amount, false,
+                .arg(BitcoinUnits::format(BitcoinUnits::BCHC, info.amount, false,
                                           BitcoinUnits::separatorNever));
         paramCount++;
     }
@@ -587,9 +587,9 @@ static boost::filesystem::path StartupShortcutPath() {
     std::string chain = ChainNameFromCommandLine();
     if (chain == CBaseChainParams::MAIN)
         return GetSpecialFolderPath(CSIDL_STARTUP) / "Bitcoin.lnk";
-    // Remove this special case when CBaseChainParams::TESTNET = "testnet4"
-    if (chain == CBaseChainParams::TESTNET)
-        return GetSpecialFolderPath(CSIDL_STARTUP) / "Bitcoin (testnet).lnk";
+    // Remove this special case when CBaseChainParams::TNET = "tnet4"
+    if (chain == CBaseChainParams::TNET)
+        return GetSpecialFolderPath(CSIDL_STARTUP) / "Bitcoin (tnet).lnk";
     return GetSpecialFolderPath(CSIDL_STARTUP) /
            strprintf("Bitcoin (%s).lnk", chain);
 }
@@ -619,9 +619,9 @@ bool SetStartOnSystemStartup(bool fAutoStart) {
 
             // Start client minimized
             QString strArgs = "-min";
-            // Set -testnet /-regtest options
+            // Set -tnet /-regtest options
             strArgs += QString::fromStdString(strprintf(
-                " -testnet=%d -regtest=%d", GetBoolArg("-testnet", false),
+                " -tnet=%d -regtest=%d", GetBoolArg("-tnet", false),
                 GetBoolArg("-regtest", false)));
 
 #ifdef UNICODE
@@ -686,8 +686,8 @@ static boost::filesystem::path GetAutostartDir() {
 static boost::filesystem::path GetAutostartFilePath() {
     std::string chain = ChainNameFromCommandLine();
     if (chain == CBaseChainParams::MAIN)
-        return GetAutostartDir() / "title.desktop";
-    return GetAutostartDir() / strprintf("title-%s.lnk", chain);
+        return GetAutostartDir() / "clashic.desktop";
+    return GetAutostartDir() / strprintf("clashic-%s.lnk", chain);
 }
 
 bool GetStartOnSystemStartup() {
@@ -722,16 +722,16 @@ bool SetStartOnSystemStartup(bool fAutoStart) {
             GetAutostartFilePath(), std::ios_base::out | std::ios_base::trunc);
         if (!optionFile.good()) return false;
         std::string chain = ChainNameFromCommandLine();
-        // Write a title.desktop file to the autostart directory:
+        // Write a clashic.desktop file to the autostart directory:
         optionFile << "[Desktop Entry]\n";
         optionFile << "Type=Application\n";
         if (chain == CBaseChainParams::MAIN)
-            optionFile << "Name=TitleNetwork\n";
+            optionFile << "Name=BitcoinClashic\n";
         else
-            optionFile << strprintf("Name=TitleNetwork (%s)\n", chain);
+            optionFile << strprintf("Name=BitcoinClashic (%s)\n", chain);
         optionFile << "Exec=" << pszExePath
-                   << strprintf(" -min -testnet=%d -regtest=%d\n",
-                                GetBoolArg("-testnet", false),
+                   << strprintf(" -min -tnet=%d -regtest=%d\n",
+                                GetBoolArg("-tnet", false),
                                 GetBoolArg("-regtest", false));
         optionFile << "Terminal=false\n";
         optionFile << "Hidden=false\n";
@@ -752,7 +752,7 @@ LSSharedFileListItemRef findStartupItemInList(LSSharedFileListRef list,
 LSSharedFileListItemRef findStartupItemInList(LSSharedFileListRef list,
                                               CFURLRef findUrl) {
     LSSharedFileListItemRef foundItem = nullptr;
-    // loop through the list of startup items and try to find the Title Network app
+    // loop through the list of startup items and try to find the Bitcoin Clashic app
     CFArrayRef listSnapshot = LSSharedFileListCopySnapshot(list, nullptr);
     for (int i = 0; !foundItem && i < CFArrayGetCount(listSnapshot); ++i) {
         LSSharedFileListItemRef item =
@@ -925,8 +925,8 @@ QString formatServicesStr(quint64 mask) {
                 case NODE_BITCOIN_CORE:
                     strList.append("CORE");
                     break;
-                case NODE_TITLE:
-                    strList.append("TITLE");
+                case NODE_CLASHIC:
+                    strList.append("CLASHIC");
                     break;
                 default:
                     strList.append(QString("%1[%2]").arg("UNKNOWN").arg(check));

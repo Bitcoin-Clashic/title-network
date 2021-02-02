@@ -10,7 +10,7 @@
 
 #include "key.h"
 #include "script/script.h"
-#include "test/test_title.h"
+#include "test/test_clashic.h"
 #include "uint256.h"
 #include "util.h"
 #include "utilstrencodings.h"
@@ -143,9 +143,9 @@ BOOST_AUTO_TEST_CASE(base58_keys_valid_parse) {
         std::vector<uint8_t> exp_payload = ParseHex(test[1].get_str());
         const UniValue &metadata = test[2].get_obj();
         bool isPrivkey = find_value(metadata, "isPrivkey").get_bool();
-        bool isTestnet = find_value(metadata, "isTestnet").get_bool();
-        if (isTestnet)
-            SelectParams(CBaseChainParams::TESTNET);
+        bool isTesbchc = find_value(metadata, "isTesbchc").get_bool();
+        if (isTesbchc)
+            SelectParams(CBaseChainParams::TNET);
         else
             SelectParams(CBaseChainParams::MAIN);
         if (isPrivkey) {
@@ -208,9 +208,9 @@ BOOST_AUTO_TEST_CASE(base58_keys_valid_gen) {
         std::vector<uint8_t> exp_payload = ParseHex(test[1].get_str());
         const UniValue &metadata = test[2].get_obj();
         bool isPrivkey = find_value(metadata, "isPrivkey").get_bool();
-        bool isTestnet = find_value(metadata, "isTestnet").get_bool();
-        if (isTestnet)
-            SelectParams(CBaseChainParams::TESTNET);
+        bool isTesbchc = find_value(metadata, "isTesbchc").get_bool();
+        if (isTesbchc)
+            SelectParams(CBaseChainParams::TNET);
         else
             SelectParams(CBaseChainParams::MAIN);
         if (isPrivkey) {

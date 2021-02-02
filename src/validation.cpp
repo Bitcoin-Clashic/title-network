@@ -771,7 +771,7 @@ static bool AcceptToMemoryPoolWorker(
         return false;
     }
 
-    // Rather not work on nonstandard transactions (unless -testnet/-regtest)
+    // Rather not work on nonstandard transactions (unless -tnet/-regtest)
     std::string reason;
     if (fRequireStandard && !IsStandardTx(tx, reason)) {
         return state.DoS(0, false, REJECT_NONSTANDARD, reason);
@@ -1283,7 +1283,7 @@ Amount GetBlockSubsidy(int nHeight, const Consensus::Params &consensusParams) {
          */
 
         // We don't hard code halvings because mainnet may have activated at a different halving
-        // interval than testnet or regtest.
+        // interval than tnet or regtest.
         int halvingsBeforeOneMinuteBlockHeight =
             floor(consensusParams.oneMinuteBlockHeight / consensusParams.nSubsidyHalvingInterval);
 
@@ -3539,7 +3539,7 @@ bool ContextualCheckBlockHeader(const CBlockHeader &block,
                              "block timestamp too far in the future");
     }
 
-    // Reject outdated version blocks when 95% (75% on testnet) of the network
+    // Reject outdated version blocks when 95% (75% on tnet) of the network
     // has upgraded:
     // check for version 2, 3 and 4 upgrades
     if ((block.nVersion < 2 && nHeight >= consensusParams.BIP34Height) ||

@@ -7,8 +7,8 @@
 #error This header can only be compiled as C++.
 #endif
 
-#ifndef TITLE_SEEDER_PROTOCOL_H
-#define TITLE_SEEDER_PROTOCOL_H
+#ifndef CLASHIC_SEEDER_PROTOCOL_H
+#define CLASHIC_SEEDER_PROTOCOL_H
 
 #include "netbase.h"
 #include "serialize.h"
@@ -18,8 +18,8 @@
 #include <string>
 
 extern bool fTestNet;
-static inline unsigned short GetDefaultPort(const bool testnet = fTestNet) {
-    return testnet ? 20333 : 10333;
+static inline unsigned short GetDefaultPort(const bool tnet = fTestNet) {
+    return tnet ? 20333 : 10333;
 }
 
 //
@@ -65,14 +65,14 @@ enum ServiceFlags : uint64_t {
     NODE_BLOOM = (1 << 2),
     NODE_XTHIN = (1 << 4),
     NODE_BITCOIN_CORE = (1 << 6),
-    NODE_TITLE = (1 << 7),
+    NODE_CLASHIC = (1 << 7),
 };
 
 class CAddress : public CService {
 public:
     CAddress();
     CAddress(CService ipIn,
-             uint64_t nServicesIn = NODE_NETWORK | NODE_TITLE);
+             uint64_t nServicesIn = NODE_NETWORK | NODE_CLASHIC);
 
     void Init();
 

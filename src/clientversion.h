@@ -13,12 +13,12 @@
  * client versioning and copyright year
  */
 
-//! These need to be macros, as clientversion.cpp's and title*-res.rc's voodoo
+//! These need to be macros, as clientversion.cpp's and clashic*-res.rc's voodoo
 //! requires it
 #define CLIENT_VERSION_MAJOR 0
-#define CLIENT_VERSION_MINOR 17
+#define CLIENT_VERSION_MINOR 18
 #define CLIENT_VERSION_REVISION 0
-#define CLIENT_VERSION_BUILD 5
+#define CLIENT_VERSION_BUILD 0
 
 //! Set to true for release, false for prerelease or test build
 #define CLIENT_VERSION_IS_RELEASE true
@@ -44,7 +44,7 @@
     "2009-" STRINGIZE(COPYRIGHT_YEAR) " " COPYRIGHT_HOLDERS_FINAL
 
 /**
- * titled-res.rc includes this file, but it cannot cope with real c++ code.
+ * clashicd-res.rc includes this file, but it cannot cope with real c++ code.
  * WINDRES_PREPROC is defined to indicate that its pre-processor is running.
  * Anything other than a define should be guarded below.
  */

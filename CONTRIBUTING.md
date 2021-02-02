@@ -1,9 +1,9 @@
-Contributing to Title Network client
+Contributing to Bitcoin Clashic client
 ====================================
 
-The Title Network project welcomes contributors!
+The Bitcoin Clashic project welcomes contributors!
 
-To contribute, checkout https://title.network
+To contribute, checkout https://bitcoin.clashic.cash/
 
 
 Copyright

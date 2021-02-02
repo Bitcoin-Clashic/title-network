@@ -4,7 +4,7 @@
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include "cashaddr.h"
-#include "test/test_title.h"
+#include "test/test_clashic.h"
 
 #include <boost/test/unit_test.hpp>
 
@@ -38,7 +38,7 @@ BOOST_AUTO_TEST_CASE(cashaddr_testvectors_valid) {
         "PREFIX:X64NX6HZ",
         "p:gpf8m4h7",
         "bitcoincash:qpzry9x8gf2tvdw0s3jn54khce6mua7lcw20ayyn",
-        "bcctest:testnetaddressqm3zpk4w",
+        "bcctest:bchcaddressqm3zpk4w",
         "bccreg:555555555555555555555555555555555555555555555lmxjk3an",
     };
     for (const std::string &str : CASES) {

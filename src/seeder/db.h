@@ -1,5 +1,5 @@
-#ifndef TITLE_SEEDER_DB_H
-#define TITLE_SEEDER_DB_H
+#ifndef CLASHIC_SEEDER_DB_H
+#define CLASHIC_SEEDER_DB_H
 
 #include "netbase.h"
 #include "protocol.h"
@@ -18,8 +18,8 @@
 
 #define REQUIRE_VERSION 80030
 
-static inline int GetRequireHeight(const bool testnet = fTestNet) {
-    return testnet ? 500000 : 350000;
+static inline int GetRequireHeight(const bool tnet = fTestNet) {
+    return tnet ? 500000 : 350000;
 }
 
 static inline std::string ToString(const CService &ip) {
@@ -114,7 +114,7 @@ public:
     bool IsGood() const {
         if (ip.GetPort() != GetDefaultPort()) return false;
         if (!(services & NODE_NETWORK)) return false;
-        if (!(services & NODE_TITLE)) return false;
+        if (!(services & NODE_CLASHIC)) return false;
         if (!ip.IsRoutable()) return false;
         if (clientVersion && clientVersion < REQUIRE_VERSION) return false;
         if (blocks && blocks < GetRequireHeight()) return false;

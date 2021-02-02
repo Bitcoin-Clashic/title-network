@@ -11,7 +11,7 @@
 /**
  * Name of client reported in the 'version' message.
  */
-const std::string CLIENT_NAME("Title Network");
+const std::string CLIENT_NAME("Bitcoin Clashic");
 
 /**
  * Client version number

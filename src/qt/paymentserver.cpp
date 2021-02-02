@@ -51,10 +51,10 @@ const int BITCOIN_IPC_CONNECT_TIMEOUT = 1000; // milliseconds
 const char *BIP70_MESSAGE_PAYMENTACK = "PaymentACK";
 const char *BIP70_MESSAGE_PAYMENTREQUEST = "PaymentRequest";
 // BIP71 payment protocol media types
-const char *BIP71_MIMETYPE_PAYMENT = "application/titlenetwork-payment";
-const char *BIP71_MIMETYPE_PAYMENTACK = "application/titlenetwork-paymentack";
+const char *BIP71_MIMETYPE_PAYMENT = "application/bitcoinclashic-payment";
+const char *BIP71_MIMETYPE_PAYMENTACK = "application/bitcoinclashic-paymentack";
 const char *BIP71_MIMETYPE_PAYMENTREQUEST =
-    "application/titlenetwork-paymentrequest";
+    "application/bitcoinclashic-paymentrequest";
 
 struct X509StoreDeleter {
     void operator()(X509_STORE *b) { X509_STORE_free(b); }
@@ -71,14 +71,14 @@ std::unique_ptr<X509_STORE, X509StoreDeleter> certStore;
 
 //
 // Create a name that is unique for:
-//  testnet / non-testnet
+//  tnet / non-tnet
 //  data directory
 //
 static QString ipcServerName() {
-    QString name("TitleQt");
+    QString name("ClashicQt");
 
     // Append a simple hash of the datadir
-    // Note that GetDataDir(true) returns a different path for -testnet versus
+    // Note that GetDataDir(true) returns a different path for -tnet versus
     // main net
     QString ddir(GUIUtil::boostPathToQString(GetDataDir(true)));
     name.append(QString::number(qHash(ddir)));
@@ -211,13 +211,13 @@ void PaymentServer::ipcParseCommandLine(int argc, char *argv[]) {
         QString arg(argv[i]);
         if (arg.startsWith("-")) continue;
 
-        // If the tnet: URI contains a payment request, we are not able
+        // If the bchc: URI contains a payment request, we are not able
         // to detect the network as that would require fetching and parsing the
         // payment request. That means clicking such an URI which contains a
-        // testnet payment request will start a mainnet instance and throw a
+        // tnet payment request will start a mainnet instance and throw a
         // "wrong network" error.
         if (arg.startsWith(GUIUtil::URI_SCHEME + ":",
-                           Qt::CaseInsensitive)) // tnet: URI
+                           Qt::CaseInsensitive)) // bchc: URI
         {
             savedPaymentRequests.append(arg);
 
@@ -228,8 +228,8 @@ void PaymentServer::ipcParseCommandLine(int argc, char *argv[]) {
                     SelectParams(CBaseChainParams::MAIN);
                 } else if (IsValidDestinationString(
                                r.address.toStdString(),
-                               Params(CBaseChainParams::TESTNET))) {
-                    SelectParams(CBaseChainParams::TESTNET);
+                               Params(CBaseChainParams::TNET))) {
+                    SelectParams(CBaseChainParams::TNET);
                 }
             }
         } else if (QFile::exists(arg)) {
@@ -241,7 +241,7 @@ void PaymentServer::ipcParseCommandLine(int argc, char *argv[]) {
                 if (request.getDetails().network() == "main") {
                     SelectParams(CBaseChainParams::MAIN);
                 } else if (request.getDetails().network() == "test") {
-                    SelectParams(CBaseChainParams::TESTNET);
+                    SelectParams(CBaseChainParams::TNET);
                 }
             }
         } else {
@@ -297,7 +297,7 @@ PaymentServer::PaymentServer(QObject *parent, bool startLocalServer)
     GOOGLE_PROTOBUF_VERIFY_VERSION;
 
     // Install global event filter to catch QFileOpenEvents
-    // on Mac: sent when you click tnet: links
+    // on Mac: sent when you click bchc: links
     // other OSes: helpful when dealing with payment request files
     if (parent) parent->installEventFilter(this);
 
@@ -329,7 +329,7 @@ PaymentServer::~PaymentServer() {
 }
 
 //
-// OSX-specific way of handling tnet: URIs and PaymentRequest mime types.
+// OSX-specific way of handling bchc: URIs and PaymentRequest mime types.
 // Also used by paymentservertests.cpp and when opening a payment request file
 // via "Open URI..." menu entry.
 //
@@ -351,7 +351,7 @@ void PaymentServer::initNetManager() {
     if (!optionsModel) return;
     if (netManager != nullptr) delete netManager;
 
-    // netManager is used to fetch paymentrequests given in tnet: URIs
+    // netManager is used to fetch paymentrequests given in bchc: URIs
     netManager = new QNetworkAccessManager(this);
 
     QNetworkProxy proxy;
@@ -389,7 +389,7 @@ void PaymentServer::handleURIOrFile(const QString &s) {
         return;
     }
 
-    // tnet: URI
+    // bchc: URI
     if (s.startsWith(GUIUtil::URI_SCHEME + ":", Qt::CaseInsensitive)) {
 #if QT_VERSION < 0x050000
         QUrl uri(s);
@@ -433,7 +433,7 @@ void PaymentServer::handleURIOrFile(const QString &s) {
                 Q_EMIT message(
                     tr("URI handling"),
                     tr("URI cannot be parsed! This can be caused by an invalid "
-                       "Title Network address or malformed URI parameters."),
+                       "Bitcoin Clashic address or malformed URI parameters."),
                     CClientUIInterface::ICON_WARNING);
 
             return;
@@ -548,7 +548,7 @@ bool PaymentServer::processPaymentRequest(const PaymentRequestPlus &request,
             // Append destination address
             addresses.append(QString::fromStdString(EncodeDestination(dest)));
         } else if (!recipient.authenticatedMerchant.isEmpty()) {
-            // Unauthenticated payment requests to custom Title Network addresses are
+            // Unauthenticated payment requests to custom Bitcoin Clashic addresses are
             // not supported
             // (there is no good way to tell the user where they are paying in a
             // way they'd
@@ -560,7 +560,7 @@ bool PaymentServer::processPaymentRequest(const PaymentRequestPlus &request,
             return false;
         }
 
-        // TNET amounts are stored as (optional) uint64 in the protobuf
+        // BCHC amounts are stored as (optional) uint64 in the protobuf
         // messages (see paymentrequest.proto), but CAmount is defined as
         // int64_t. Because of that we need to verify that amounts are in a
         // valid range and no overflow has happened.

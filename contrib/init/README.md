@@ -1,11 +1,11 @@
 Sample configuration files for:
 
-SystemD: titled.service
-Upstart: titled.conf
-OpenRC:  titled.openrc
-         titled.openrcconf
-CentOS:  titled.init
-OS X:    org.title.titled.plist
+SystemD: clashicd.service
+Upstart: clashicd.conf
+OpenRC:  clashicd.openrc
+         clashicd.openrcconf
+CentOS:  clashicd.init
+OS X:    org.clashic.clashicd.plist
 
 have been made available to assist packagers in creating node packages here.
 

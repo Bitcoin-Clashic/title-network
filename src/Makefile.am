@@ -24,29 +24,29 @@ BITCOIN_INCLUDES=-I$(builddir) -I$(builddir)/obj $(BDB_CPPFLAGS) $(BOOST_CPPFLAG
 BITCOIN_INCLUDES += -I$(srcdir)/secp256k1/include
 BITCOIN_INCLUDES += $(UNIVALUE_CFLAGS)
 
-TITLE_SEEDER_INCLUDES = -I$(srcdir)/seeder
-TITLE_SEEDER_INCLUDES += $(BITCOIN_INCLUDES)
+CLASHIC_SEEDER_INCLUDES = -I$(srcdir)/seeder
+CLASHIC_SEEDER_INCLUDES += $(BITCOIN_INCLUDES)
 
-LIBTITLE_SERVER=libtitle_server.a
-LIBTITLE_COMMON=libtitle_common.a
-LIBTITLE_CONSENSUS=libtitle_consensus.a
-LIBTITLE_CLI=libtitle_cli.a
-LIBTITLE_UTIL=libtitle_util.a
-LIBTITLE_CRYPTO=crypto/libtitle_crypto.a
-LIBTITLEQT=qt/libtitleqt.a
+LIBCLASHIC_SERVER=libclashic_server.a
+LIBCLASHIC_COMMON=libclashic_common.a
+LIBCLASHIC_CONSENSUS=libclashic_consensus.a
+LIBCLASHIC_CLI=libclashic_cli.a
+LIBCLASHIC_UTIL=libclashic_util.a
+LIBCLASHIC_CRYPTO=crypto/libclashic_crypto.a
+LIBCLASHICQT=qt/libclashicqt.a
 LIBSECP256K1=secp256k1/libsecp256k1.la
 
 if ENABLE_ZMQ
-LIBTITLE_ZMQ=libtitle_zmq.a
+LIBCLASHIC_ZMQ=libclashic_zmq.a
 endif
-if BUILD_TITLE_LIBS
-LIBTITLECONSENSUS=libtitleconsensus.la
+if build_clashic_LIBS
+LIBCLASHICCONSENSUS=libclashicconsensus.la
 endif
-if BUILD_TITLE_SEEDER
-LIBTITLE_SEEDER=libtitle_seeder.a
+if build_clashic_SEEDER
+LIBCLASHIC_SEEDER=libclashic_seeder.a
 endif
 if ENABLE_WALLET
-LIBTITLE_WALLET=libtitle_wallet.a
+LIBCLASHIC_WALLET=libclashic_wallet.a
 endif
 
 $(LIBSECP256K1): $(wildcard secp256k1/src/*) $(wildcard secp256k1/include/*)
@@ -55,33 +55,33 @@ $(LIBSECP256K1): $(wildcard secp256k1/src/*) $(wildcard secp256k1/include/*)
 # Make is not made aware of per-object dependencies to avoid limiting building parallelization
 # But to build the less dependent modules first, we manually select their order here:
 EXTRA_LIBRARIES += \
-  $(LIBTITLE_CRYPTO) \
-  $(LIBTITLE_UTIL) \
-  $(LIBTITLE_COMMON) \
-  $(LIBTITLE_CONSENSUS) \
-  $(LIBTITLE_SERVER) \
-  $(LIBTITLE_CLI) \
-  $(LIBTITLE_SEEDER) \
-  $(LIBTITLE_WALLET) \
-  $(LIBTITLE_ZMQ)
+  $(LIBCLASHIC_CRYPTO) \
+  $(LIBCLASHIC_UTIL) \
+  $(LIBCLASHIC_COMMON) \
+  $(LIBCLASHIC_CONSENSUS) \
+  $(LIBCLASHIC_SERVER) \
+  $(LIBCLASHIC_CLI) \
+  $(LIBCLASHIC_SEEDER) \
+  $(LIBCLASHIC_WALLET) \
+  $(LIBCLASHIC_ZMQ)
 
-lib_LTLIBRARIES = $(LIBTITLECONSENSUS)
+lib_LTLIBRARIES = $(LIBCLASHICCONSENSUS)
 
 bin_PROGRAMS =
 noinst_PROGRAMS =
 TESTS =
 BENCHMARKS =
 
-if BUILD_TITLED
-  bin_PROGRAMS += titled
+if build_clashicD
+  bin_PROGRAMS += clashicd
 endif
 
-if BUILD_TITLE_SEEDER
-  bin_PROGRAMS += title-seeder
+if build_clashic_SEEDER
+  bin_PROGRAMS += clashic-seeder
 endif
 
-if BUILD_TITLE_UTILS
-  bin_PROGRAMS += title-cli title-tx
+if build_clashic_UTILS
+  bin_PROGRAMS += clashic-cli clashic-tx
 endif
 
 .PHONY: FORCE check-symbols check-security
@@ -187,12 +187,12 @@ obj/build.h: FORCE
 	@$(MKDIR_P) $(builddir)/obj
 	@$(top_srcdir)/share/genbuild.sh $(abs_top_builddir)/src/obj/build.h \
 	  $(abs_top_srcdir)
-libtitle_util_a-clientversion.$(OBJEXT): obj/build.h
+libclashic_util_a-clientversion.$(OBJEXT): obj/build.h
 
-# server: shared between titled and title-qt
-libtitle_server_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES) $(MINIUPNPC_CPPFLAGS) $(EVENT_CFLAGS) $(EVENT_PTHREADS_CFLAGS)
-libtitle_server_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
-libtitle_server_a_SOURCES = \
+# server: shared between clashicd and clashic-qt
+libclashic_server_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES) $(MINIUPNPC_CPPFLAGS) $(EVENT_CFLAGS) $(EVENT_PTHREADS_CFLAGS)
+libclashic_server_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
+libclashic_server_a_SOURCES = \
   addrman.cpp \
   addrdb.cpp \
   bloom.cpp \
@@ -235,20 +235,20 @@ libtitle_server_a_SOURCES = \
   $(BITCOIN_CORE_H)
 
 if ENABLE_ZMQ
-libtitle_zmq_a_CPPFLAGS = $(BITCOIN_INCLUDES) $(ZMQ_CFLAGS)
-libtitle_zmq_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
-libtitle_zmq_a_SOURCES = \
+libclashic_zmq_a_CPPFLAGS = $(BITCOIN_INCLUDES) $(ZMQ_CFLAGS)
+libclashic_zmq_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
+libclashic_zmq_a_SOURCES = \
   zmq/zmqabstractnotifier.cpp \
   zmq/zmqnotificationinterface.cpp \
   zmq/zmqpublishnotifier.cpp
 endif
 
 
-# wallet: shared between titled and title-qt, but only linked
+# wallet: shared between clashicd and clashic-qt, but only linked
 # when wallet enabled
-libtitle_wallet_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
-libtitle_wallet_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
-libtitle_wallet_a_SOURCES = \
+libclashic_wallet_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
+libclashic_wallet_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
+libclashic_wallet_a_SOURCES = \
   wallet/crypter.cpp \
   wallet/db.cpp \
   wallet/finaltx.cpp \
@@ -259,9 +259,9 @@ libtitle_wallet_a_SOURCES = \
   $(BITCOIN_CORE_H)
 
 # crypto primitives library
-crypto_libtitle_crypto_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_CONFIG_INCLUDES)
-crypto_libtitle_crypto_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
-crypto_libtitle_crypto_a_SOURCES = \
+crypto_libclashic_crypto_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_CONFIG_INCLUDES)
+crypto_libclashic_crypto_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
+crypto_libclashic_crypto_a_SOURCES = \
   crypto/aes.cpp \
   crypto/aes.h \
   crypto/chacha20.h \
@@ -281,9 +281,9 @@ crypto_libtitle_crypto_a_SOURCES = \
   crypto/sha512.h
 
 # consensus: shared between all executables that validate any consensus rules.
-libtitle_consensus_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
-libtitle_consensus_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
-libtitle_consensus_a_SOURCES = \
+libclashic_consensus_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
+libclashic_consensus_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
+libclashic_consensus_a_SOURCES = \
   amount.h \
   arith_uint256.cpp \
   arith_uint256.h \
@@ -302,7 +302,7 @@ libtitle_consensus_a_SOURCES = \
   primitives/transaction.h \
   pubkey.cpp \
   pubkey.h \
-  script/titleconsensus.cpp \
+  script/clashicconsensus.cpp \
   script/sighashtype.h \
   script/interpreter.cpp \
   script/interpreter.h \
@@ -318,10 +318,10 @@ libtitle_consensus_a_SOURCES = \
   utilstrencodings.h \
   version.h
 
-# common: shared between titled, and title-qt and non-server tools
-libtitle_common_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
-libtitle_common_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
-libtitle_common_a_SOURCES = \
+# common: shared between clashicd, and clashic-qt and non-server tools
+libclashic_common_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
+libclashic_common_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
+libclashic_common_a_SOURCES = \
   amount.cpp \
   base58.cpp \
   cashaddr.cpp \
@@ -344,9 +344,9 @@ libtitle_common_a_SOURCES = \
 # util: shared between all executables.
 # This library *must* be included to make sure that the glibc
 # backward-compatibility objects and their sanity checks are linked.
-libtitle_util_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
-libtitle_util_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
-libtitle_util_a_SOURCES = \
+libclashic_util_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
+libclashic_util_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
+libclashic_util_a_SOURCES = \
   support/lockedpool.cpp \
   chainparamsbase.cpp \
   clientversion.cpp \
@@ -365,21 +365,21 @@ libtitle_util_a_SOURCES = \
   $(BITCOIN_CORE_H)
 
 if GLIBC_BACK_COMPAT
-libtitle_util_a_SOURCES += compat/glibc_compat.cpp
+libclashic_util_a_SOURCES += compat/glibc_compat.cpp
 AM_LDFLAGS += $(COMPAT_LDFLAGS)
 endif
 
-# cli: shared between title-cli and title-qt
-libtitle_cli_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
-libtitle_cli_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
-libtitle_cli_a_SOURCES = \
+# cli: shared between clashic-cli and clashic-qt
+libclashic_cli_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
+libclashic_cli_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
+libclashic_cli_a_SOURCES = \
   rpc/client.cpp \
   $(BITCOIN_CORE_H)
 
 # seeder library
-libtitle_seeder_a_CPPFLAGS = $(AM_CPPFLAGS) $(PIE_FLAGS) $(TITLE_SEEDER_INCLUDES)
-libtitle_seeder_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
-libtitle_seeder_a_SOURCES = \
+libclashic_seeder_a_CPPFLAGS = $(AM_CPPFLAGS) $(PIE_FLAGS) $(CLASHIC_SEEDER_INCLUDES)
+libclashic_seeder_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
+libclashic_seeder_a_SOURCES = \
   seeder/bitcoin.cpp \
   seeder/bitcoin.h \
   seeder/compat.h \
@@ -395,102 +395,102 @@ libtitle_seeder_a_SOURCES = \
   seeder/util.cpp \
   seeder/util.h
 
-nodist_libtitle_util_a_SOURCES = $(srcdir)/obj/build.h
+nodist_libclashic_util_a_SOURCES = $(srcdir)/obj/build.h
 #
 
-# titled binary #
-titled_SOURCES = titled.cpp
-titled_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
-titled_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
-titled_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS)
+# clashicd binary #
+clashicd_SOURCES = clashicd.cpp
+clashicd_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
+clashicd_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
+clashicd_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS)
 
 if TARGET_WINDOWS
-titled_SOURCES += titled-res.rc
+clashicd_SOURCES += clashicd-res.rc
 endif
 
-titled_LDADD = \
-  $(LIBTITLE_SERVER) \
-  $(LIBTITLE_COMMON) \
+clashicd_LDADD = \
+  $(LIBCLASHIC_SERVER) \
+  $(LIBCLASHIC_COMMON) \
   $(LIBUNIVALUE) \
-  $(LIBTITLE_UTIL) \
-  $(LIBTITLE_WALLET) \
-  $(LIBTITLE_ZMQ) \
-  $(LIBTITLE_CONSENSUS) \
-  $(LIBTITLE_CRYPTO) \
+  $(LIBCLASHIC_UTIL) \
+  $(LIBCLASHIC_WALLET) \
+  $(LIBCLASHIC_ZMQ) \
+  $(LIBCLASHIC_CONSENSUS) \
+  $(LIBCLASHIC_CRYPTO) \
   $(LIBLEVELDB) \
   $(LIBLEVELDB_SSE42) \
   $(LIBMEMENV) \
   $(LIBSECP256K1)
 
-titled_LDADD += $(BOOST_LIBS) $(BDB_LIBS) $(SSL_LIBS) $(CRYPTO_LIBS) $(MINIUPNPC_LIBS) $(EVENT_PTHREADS_LIBS) $(EVENT_LIBS) $(ZMQ_LIBS)
+clashicd_LDADD += $(BOOST_LIBS) $(BDB_LIBS) $(SSL_LIBS) $(CRYPTO_LIBS) $(MINIUPNPC_LIBS) $(EVENT_PTHREADS_LIBS) $(EVENT_LIBS) $(ZMQ_LIBS)
 
-# title-cli binary #
-title_cli_SOURCES = title-cli.cpp
-title_cli_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES) $(EVENT_CFLAGS)
-title_cli_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
-title_cli_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS)
-
-if TARGET_WINDOWS
-title_cli_SOURCES += title-cli-res.rc
-endif
-
-title_cli_LDADD = \
-  $(LIBTITLE_CLI) \
-  $(LIBUNIVALUE) \
-  $(LIBTITLE_UTIL) \
-  $(LIBTITLE_CRYPTO)
-
-title_cli_LDADD += $(BOOST_LIBS) $(SSL_LIBS) $(CRYPTO_LIBS) $(EVENT_LIBS)
-#
-
-# title-seeder binary #
-title_seeder_SOURCES = seeder/main.cpp
-title_seeder_CPPFLAGS = $(AM_CPPFLAGS) $(TITLE_SEEDER_INCLUDES)
-title_seeder_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
-title_seeder_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS)
-
-title_seeder_LDADD = \
-  $(LIBTITLE_SEEDER) \
-  $(LIBTITLE_UTIL) \
-  $(LIBTITLE_CRYPTO)
-
-title_seeder_LDADD += $(BOOST_LIBS) $(BDB_LIBS) $(SSL_LIBS) $(CRYPTO_LIBS) $(MINIUPNPC_LIBS) $(EVENT_PTHREADS_LIBS) $(EVENT_LIBS) $(ZMQ_LIBS)
-#
-
-# title-tx binary #
-title_tx_SOURCES = title-tx.cpp
-title_tx_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
-title_tx_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
-title_tx_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS)
+# clashic-cli binary #
+clashic_cli_SOURCES = clashic-cli.cpp
+clashic_cli_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES) $(EVENT_CFLAGS)
+clashic_cli_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
+clashic_cli_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS)
 
 if TARGET_WINDOWS
-title_tx_SOURCES += title-tx-res.rc
+clashic_cli_SOURCES += clashic-cli-res.rc
 endif
 
-title_tx_LDADD = \
+clashic_cli_LDADD = \
+  $(LIBCLASHIC_CLI) \
   $(LIBUNIVALUE) \
-  $(LIBTITLE_COMMON) \
-  $(LIBTITLE_UTIL) \
-  $(LIBTITLE_CONSENSUS) \
-  $(LIBTITLE_CRYPTO) \
+  $(LIBCLASHIC_UTIL) \
+  $(LIBCLASHIC_CRYPTO)
+
+clashic_cli_LDADD += $(BOOST_LIBS) $(SSL_LIBS) $(CRYPTO_LIBS) $(EVENT_LIBS)
+#
+
+# clashic-seeder binary #
+clashic_seeder_SOURCES = seeder/main.cpp
+clashic_seeder_CPPFLAGS = $(AM_CPPFLAGS) $(CLASHIC_SEEDER_INCLUDES)
+clashic_seeder_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
+clashic_seeder_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS)
+
+clashic_seeder_LDADD = \
+  $(LIBCLASHIC_SEEDER) \
+  $(LIBCLASHIC_UTIL) \
+  $(LIBCLASHIC_CRYPTO)
+
+clashic_seeder_LDADD += $(BOOST_LIBS) $(BDB_LIBS) $(SSL_LIBS) $(CRYPTO_LIBS) $(MINIUPNPC_LIBS) $(EVENT_PTHREADS_LIBS) $(EVENT_LIBS) $(ZMQ_LIBS)
+#
+
+# clashic-tx binary #
+clashic_tx_SOURCES = clashic-tx.cpp
+clashic_tx_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
+clashic_tx_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
+clashic_tx_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS)
+
+if TARGET_WINDOWS
+clashic_tx_SOURCES += clashic-tx-res.rc
+endif
+
+clashic_tx_LDADD = \
+  $(LIBUNIVALUE) \
+  $(LIBCLASHIC_COMMON) \
+  $(LIBCLASHIC_UTIL) \
+  $(LIBCLASHIC_CONSENSUS) \
+  $(LIBCLASHIC_CRYPTO) \
   $(LIBSECP256K1)
 
-title_tx_LDADD += $(BOOST_LIBS) $(CRYPTO_LIBS)
+clashic_tx_LDADD += $(BOOST_LIBS) $(CRYPTO_LIBS)
 #
 
-# titleconsensus library #
-if BUILD_TITLE_LIBS
-include_HEADERS = script/titleconsensus.h
-libtitleconsensus_la_SOURCES = $(crypto_libtitle_crypto_a_SOURCES) $(libtitle_consensus_a_SOURCES)
+# clashicconsensus library #
+if build_clashic_LIBS
+include_HEADERS = script/clashicconsensus.h
+libclashicconsensus_la_SOURCES = $(crypto_libclashic_crypto_a_SOURCES) $(libclashic_consensus_a_SOURCES)
 
 if GLIBC_BACK_COMPAT
-  libtitleconsensus_la_SOURCES += compat/glibc_compat.cpp
+  libclashicconsensus_la_SOURCES += compat/glibc_compat.cpp
 endif
 
-libtitleconsensus_la_LDFLAGS = $(AM_LDFLAGS) $(RELDFLAGS)
-libtitleconsensus_la_LIBADD = $(LIBSECP256K1)
-libtitleconsensus_la_CPPFLAGS = $(AM_CPPFLAGS) -I$(builddir)/obj -I$(srcdir)/secp256k1/include $(BITCOIN_INCLUDES) -DBUILD_BITCOIN_INTERNAL
-libtitleconsensus_la_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
+libclashicconsensus_la_LDFLAGS = $(AM_LDFLAGS) $(RELDFLAGS)
+libclashicconsensus_la_LIBADD = $(LIBSECP256K1)
+libclashicconsensus_la_CPPFLAGS = $(AM_CPPFLAGS) -I$(builddir)/obj -I$(srcdir)/secp256k1/include $(BITCOIN_INCLUDES) -DBUILD_BITCOIN_INTERNAL
+libclashicconsensus_la_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
 
 endif
 #

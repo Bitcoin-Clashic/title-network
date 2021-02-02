@@ -36,7 +36,7 @@ static uint32_t GetNextEDAWorkRequired(const CBlockIndex *pindexPrev,
         UintToArith256(params.powLimit).GetCompact();
 
     if (params.fPowAllowMinDifficultyBlocks) {
-        // Special difficulty rule for testnet:
+        // Special difficulty rule for tnet:
         // If the new block's timestamp is more than 2* 10 minutes then allow
         // mining of a min-difficulty block.
         if (pblock->GetBlockTime() >
@@ -95,7 +95,7 @@ uint32_t GetNextWorkRequired(const CBlockIndex *pindexPrev,
         return UintToArith256(params.powLimit).GetCompact();
     }
 
-    // Special rule for testnet for first 150 blocks
+    // Special rule for tnet for first 150 blocks
     if (params.fPowAllowMinDifficultyBlocks && nHeight <= 150) {
         return 0x201fffff;
     }
@@ -307,8 +307,8 @@ uint32_t GetNextCoreWorkRequired(const CBlockIndex *pindexPrev,
         GetSuitableBlock(pindexPrev->GetAncestor(nHeightFirst));
     assert(pindexFirst);
 
-    // Special difficulty rule for testnet:
-    // If the last 30 blocks took 4 hours on testnet instead of 30-min,
+    // Special difficulty rule for tnet:
+    // If the last 30 blocks took 4 hours on tnet instead of 30-min,
     // then allow mining of a min-difficulty block.
     int64_t nActualThirtyBlocksDurationSeconds =
         pindexLast->GetBlockTime() - pindexFirst->GetBlockTime();

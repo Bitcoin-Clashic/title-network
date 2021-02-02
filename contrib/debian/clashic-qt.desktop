@@ -1,0 +1,13 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Bitcoin Clashic
+Comment=Connect to the Bitcoin Clashic P2P Network
+Comment[de]=Verbinde mit dem Bitcoin Clashic peer-to-peer Netzwerk
+Comment[fr]=Bitcoin Clashic, monnaie virtuelle cryptographique pair à pair
+Comment[tr]=Bitcoin Clashic, eşten eşe kriptografik sanal para birimi
+Exec=clashic-qt %u
+Terminal=false
+Type=Application
+Icon=clashic128
+MimeType=x-scheme-handler/bitcoinclashic;
+Categories=Office;Finance;

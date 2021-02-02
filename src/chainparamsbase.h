@@ -10,14 +10,14 @@
 
 /**
  * CBaseChainParams defines the base parameters
- * (shared between title-cli and titled)
+ * (shared between clashic-cli and clashicd)
  * of a given instance of the Bitcoin ABCD system.
  */
 class CBaseChainParams {
 public:
     /** BIP70 chain name strings (main, test or regtest) */
     static const std::string MAIN;
-    static const std::string TESTNET;
+    static const std::string TNET;
     static const std::string REGTEST;
 
     const std::string &DataDir() const { return strDataDir; }
@@ -48,7 +48,7 @@ CBaseChainParams &BaseParams(const std::string &chain);
 void SelectBaseParams(const std::string &chain);
 
 /**
- * Looks for -regtest, -testnet and returns the appropriate BIP70 chain name.
+ * Looks for -regtest, -tnet and returns the appropriate BIP70 chain name.
  * @return CBaseChainParams::MAX_NETWORK_TYPES if an invalid combination is
  * given. CBaseChainParams::MAIN by default.
  */

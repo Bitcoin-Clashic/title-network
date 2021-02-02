@@ -137,7 +137,7 @@ bool ShutdownRequested() {
 /**
  * This is a minimally invasive approach to shutdown on LevelDB read errors from
  * the chainstate, while keeping user interface out of the common library, which
- * is shared between titled, and title-qt and non-server tools.
+ * is shared between clashicd, and clashic-qt and non-server tools.
  */
 class CCoinsViewErrorCatcher : public CCoinsViewBacked {
 public:
@@ -329,17 +329,17 @@ std::string HelpMessage(HelpMessageMode mode) {
         "-assumevalid=<hex>",
         strprintf(_("If this block is in the chain assume that it and its "
                     "ancestors are valid and potentially skip their script "
-                    "verification (0 to verify all, default: %s, testnet: %s)"),
+                    "verification (0 to verify all, default: %s, tnet: %s)"),
                   Params(CBaseChainParams::MAIN)
                       .GetConsensus()
                       .defaultAssumeValid.GetHex(),
-                  Params(CBaseChainParams::TESTNET)
+                  Params(CBaseChainParams::TNET)
                       .GetConsensus()
                       .defaultAssumeValid.GetHex()));
     strUsage += HelpMessageOpt(
         "-conf=<file>", strprintf(_("Specify configuration file (default: %s)"),
-                                  TITLE_CONF_FILENAME));
-    if (mode == HMM_TITLED) {
+                                  CLASHIC_CONF_FILENAME));
+    if (mode == HMM_CLASHICD) {
 #if HAVE_DECL_DAEMON
         strUsage += HelpMessageOpt(
             "-daemon",
@@ -387,7 +387,7 @@ std::string HelpMessage(HelpMessageMode mode) {
 #ifndef WIN32
     strUsage += HelpMessageOpt(
         "-pid=<file>",
-        strprintf(_("Specify pid file (default: %s)"), TITLE_PID_FILENAME));
+        strprintf(_("Specify pid file (default: %s)"), CLASHIC_PID_FILENAME));
 #endif
     strUsage += HelpMessageOpt(
         "-prune=<n>",
@@ -502,9 +502,9 @@ std::string HelpMessage(HelpMessageMode mode) {
     strUsage += HelpMessageOpt(
         "-port=<port>",
         strprintf(
-            _("Listen for connections on <port> (default: %u or testnet: %u)"),
+            _("Listen for connections on <port> (default: %u or tnet: %u)"),
             Params(CBaseChainParams::MAIN).GetDefaultPort(),
-            Params(CBaseChainParams::TESTNET).GetDefaultPort()));
+            Params(CBaseChainParams::TNET).GetDefaultPort()));
     strUsage +=
         HelpMessageOpt("-proxy=<ip:port>", _("Connect through SOCKS5 proxy"));
     strUsage += HelpMessageOpt(
@@ -744,8 +744,8 @@ std::string HelpMessage(HelpMessageMode mode) {
             "-acceptnonstdtxn",
             strprintf(
                 "Relay and mine \"non-standard\" transactions (%sdefault: %u)",
-                "testnet/regtest only; ",
-                !Params(CBaseChainParams::TESTNET).RequireStandard()));
+                "tnet/regtest only; ",
+                !Params(CBaseChainParams::TNET).RequireStandard()));
         strUsage +=
             HelpMessageOpt("-excessiveblocksize=<n>",
                            strprintf(_("Do not accept blocks larger than this "
@@ -828,9 +828,9 @@ std::string HelpMessage(HelpMessageMode mode) {
     strUsage += HelpMessageOpt(
         "-rpcport=<port>",
         strprintf(_("Listen for JSON-RPC connections on <port> (default: %u or "
-                    "testnet: %u)"),
+                    "tnet: %u)"),
                   BaseParams(CBaseChainParams::MAIN).RPCPort(),
-                  BaseParams(CBaseChainParams::TESTNET).RPCPort()));
+                  BaseParams(CBaseChainParams::TNET).RPCPort()));
     strUsage += HelpMessageOpt(
         "-rpcallowip=<ip>",
         _("Allow JSON-RPC connections from specified source. Valid for <ip> "
@@ -858,8 +858,8 @@ std::string HelpMessage(HelpMessageMode mode) {
 
 std::string LicenseInfo() {
     const std::string URL_SOURCE_CODE =
-        "<https://github.com/title-network/title-network>";
-    const std::string URL_WEBSITE = "<https://title.network>";
+        "<https://github.com/Bitcoin-Clashic/wallet-official>";
+    const std::string URL_WEBSITE = "<https://bitcoin.clashic.cash/>";
 
     return CopyrightHolders(
                strprintf(_("Copyright (C) %i-%i"), 2009, COPYRIGHT_YEAR) +
@@ -1038,7 +1038,7 @@ void ThreadImport(const Config &config,
 }
 
 /** Sanity checks
- *  Ensure that Title Network is running in a usable environment with all
+ *  Ensure that Bitcoin Clashic is running in a usable environment with all
  *  necessary library support.
  */
 bool InitSanityCheck(void) {
@@ -1520,13 +1520,13 @@ bool AppInitParameterInteraction(Config &config) {
     if (GetBoolArg("-peerbloomfilters", DEFAULT_PEERBLOOMFILTERS))
         nLocalServices = ServiceFlags(nLocalServices | NODE_BLOOM);
 
-    // Signal Title Network support.
+    // Signal Bitcoin Clashic support.
     // TODO: remove some time after the hardfork when no longer needed
     // to differentiate the network nodes.
-    nLocalServices = ServiceFlags(nLocalServices | NODE_TITLE);
+    nLocalServices = ServiceFlags(nLocalServices | NODE_CLASHIC);
 
-    // Preferentially keep peers which service NODE_TITLE
-    nRelevantServices = ServiceFlags(nRelevantServices | NODE_TITLE);
+    // Preferentially keep peers which service NODE_CLASHIC
+    nRelevantServices = ServiceFlags(nRelevantServices | NODE_CLASHIC);
 
     nMaxTipAge = GetArg("-maxtipage", DEFAULT_MAX_TIP_AGE);
 
@@ -1654,7 +1654,7 @@ bool AppInitMain(Config &config, boost::thread_group &threadGroup,
     LogPrintf("Default data directory %s\n", GetDefaultDataDir().string());
     LogPrintf("Using data directory %s\n", GetDataDir().string());
     LogPrintf("Using config file %s\n",
-              GetConfigFile(GetArg("-conf", TITLE_CONF_FILENAME)).string());
+              GetConfigFile(GetArg("-conf", CLASHIC_CONF_FILENAME)).string());
     LogPrintf("Using at most %i automatic connections (%i file descriptors "
               "available)\n",
               nMaxConnections, nFD);
@@ -1962,7 +1962,7 @@ bool AppInitMain(Config &config, boost::thread_group &threadGroup,
                 }
 
                 // If the loaded chain has a wrong genesis, bail out immediately
-                // (we're likely using a testnet datadir, or the other way
+                // (we're likely using a tnet datadir, or the other way
                 // around).
                 if (!mapBlockIndex.empty() &&
                     mapBlockIndex.count(
